@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <style>
+        /* 重置默认样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* 页面容器样式 - 全屏显示 */
+        body, html {
+            height: 100%;
+            overflow: hidden; /* 隐藏滚动条 */
+        }
+
+        /* 背景图容器 */
+        .background-container {
+            width: 100%;
+            height: 100%;
+            /* 设置背景图 */
+            background-image: url('background.jpg'); /* 背景图路径 */
+            /* 背景图自适应 */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        /* 音频控件样式（可选：隐藏或自定义） */
+        audio {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            /* 如果想隐藏音频控件，取消下面注释*/
+            opacity: 0;
+            pointer-events: none;
+
+        }
+    </style>
+</head>
+<body>
+<div class="background-container"></div>
+
+<!-- 音频播放控件 -->
+<audio id="musicPlayer" autoplay loop controls>
+    <!-- 支持多种音频格式，提高兼容性 -->
+    <source src="偷心.mp3" type="audio/flac">
+    您的浏览器不支持音频播放，请升级浏览器！
+</audio>
+
+<script>
+        // 处理浏览器自动播放策略限制
+        document.addEventListener('DOMContentLoaded', function() {
+            const audio = document.getElementById('musicPlayer');
+
+            // 尝试播放音频（处理浏览器策略）
+            function playAudio() {
+                audio.play().catch(function(error) {
+                    console.log('自动播放失败，需要用户交互:', error);
+                    // 提示用户点击页面以播放音乐
+                    alert('由于浏览器策略限制，请点击页面任意位置以播放音乐');
+
+                    // 监听用户点击事件，触发播放
+                    document.addEventListener('click', function playOnClick() {
+                        audio.play();
+                        document.removeEventListener('click', playOnClick);
+                    }, { once: true });
+                });
+            }
+
+            playAudio();
+        });
+    </script>
+</body>
+</html>
